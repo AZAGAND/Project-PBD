@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Livewire\Master;
 
 use Livewire\Component;
+use App\Models\Satuan;
 
 class SatuanCrud extends Component
 {
@@ -12,7 +12,7 @@ class SatuanCrud extends Component
         'nama_satuan' => 'required|string|max:45',
         'status' => 'required|in:0,1'
     ];
-    
+
     public function render()
     {
         return view('livewire.master.satuan-crud', [
@@ -20,39 +20,38 @@ class SatuanCrud extends Component
         ]);
     }
 
-    public function resetForm() {
-        $this->nama_satuan=''; $this->status=1; $this->idsatuan=null; $this->isEdit=false;
-    }
+    public function resetForm(){ $this->nama_satuan=''; $this->status=1; $this->idsatuan=null; $this->isEdit=false; }
 
     public function store()
     {
         $this->validate();
-        satuan::create(['nama_satuan'=>$this->nama_satuan,'status'=>$this->status]);
-        session()->flash('Wuokehh',"satuan ditambahkan");
+        Satuan::create(['nama_satuan'=>$this->nama_satuan,'status'=>$this->status]);
+        session()->flash('ok','Satuan ditambahkan');
         $this->resetForm();
     }
 
     public function edit($id)
     {
-        $data=satuan::find($id);
-        $this->idsatuan=$data->idsatuan;
-        $this->nama_satuan=$data->nama_satuan;
-        $this->status=$data->status;
+        $m=Satuan::findOrFail($id);
+        $this->idsatuan=$m->idsatuan;
+        $this->nama_satuan=$m->nama_satuan;
+        $this->status=$m->status;
         $this->isEdit=true;
     }
 
     public function update()
     {
         $this->validate();
-        satuan::where('idsatuan', $this->idsatuan)->update(['nama_satuan'=>$this->nama_satuan,'status'=>$this->status]);
-        session()->flash('Wuokehh',"satuan diupdate");
+        Satuan::where('idsatuan',$this->idsatuan)->update([
+            'nama_satuan'=>$this->nama_satuan,'status'=>$this->status
+        ]);
+        session()->flash('ok','Satuan diupdate');
         $this->resetForm();
     }
 
     public function delete($id)
     {
-        try {satuan::destroy($id); session()->flash('wuokehh', "satuan dihapus");}
-        catch(\Throwable $e) {session()->flash('error', "satuan tidak bisa dihapus");}
+        try { Satuan::destroy($id); session()->flash('ok','Satuan dihapus'); }
+        catch (\Throwable $e) { session()->flash('err','Gagal hapus (dipakai di barang)'); }
     }
-
 }

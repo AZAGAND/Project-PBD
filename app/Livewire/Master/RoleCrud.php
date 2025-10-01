@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Livewire\Master;
 
 use Livewire\Component;
+use App\Models\Role;
 
 class RoleCrud extends Component
 {
