@@ -49,7 +49,7 @@ class SatuanCrud extends Component
         $this->resetForm();
     }
 
-    public function delete()
+    public function delete($id)
     {
         try {satuan::destroy($id); session()->flash('wuokehh', "satuan dihapus");}
         catch(\Throwable $e) {session()->flash('error', "satuan tidak bisa dihapus");}
