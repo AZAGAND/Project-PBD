@@ -31,4 +31,28 @@ class SatuanCrud extends Component
         session()->flash('Wuokehh',"satuan ditambahkan");
         $this->resetForm();
     }
+
+    public function edit($id)
+    {
+        $data=satuan::find($id);
+        $this->idsatuan=$data->idsatuan;
+        $this->nama_satuan=$data->nama_satuan;
+        $this->status=$data->status;
+        $this->isEdit=true;
+    }
+
+    public function update()
+    {
+        $this->validate();
+        satuan::where('idsatuan', $this->idsatuan)->update(['nama_satuan'=>$this->nama_satuan,'status'=>$this->status]);
+        session()->flash('Wuokehh',"satuan diupdate");
+        $this->resetForm();
+    }
+
+    public function delete()
+    {
+        try {satuan::destroy($id); session()->flash('wuokehh', "satuan dihapus");}
+        catch(\Throwable $e) {session()->flash('error', "satuan tidak bisa dihapus");}
+    }
+
 }
