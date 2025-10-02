@@ -1,116 +1,62 @@
-<?php
+<div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow p-8">
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+        <x-app-logo-icon class="h-12 w-12 text-blue-600 dark:text-blue-400" />
+    </div>
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
-use Livewire\Volt\Component;
+    <!-- Title -->
+    <h2 class="text-center text-2xl font-bold text-gray-900 dark:text-gray-100">
+        Log in to your account
+    </h2>
+    <p class="mt-1 text-center text-sm text-gray-600 dark:text-gray-400">
+        Enter your Username and password below
+    </p>
 
-new #[Layout('components.layouts.auth')] class extends Component {
-    #[Validate('required|string|email')]
-    public string $email = '';
-
-    #[Validate('required|string')]
-    public string $password = '';
-
-    public bool $remember = false;
-
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function login(): void
-    {
-        $this->validate();
-
-        $this->ensureIsNotRateLimited();
-
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
-
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
-        }
-
-        RateLimiter::clear($this->throttleKey());
-        Session::regenerate();
-
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    }
-
-    /**
-     * Ensure the authentication request is not rate limited.
-     */
-    protected function ensureIsNotRateLimited(): void
-    {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            return;
-        }
-
-        event(new Lockout(request()));
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
-        throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
-    }
-
-    /**
-     * Get the authentication rate limiting throttle key.
-     */
-    protected function throttleKey(): string
-    {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
-    }
-}; ?>
-
-<div class="flex flex-col gap-6">
-    <x-auth-header title="Log in to your account" description="Enter your email and password below to log in" />
-
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
-
-    <form wire:submit="login" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input wire:model="email" label="{{ __('Email address') }}" type="email" name="email" required autofocus autocomplete="email" placeholder="email@example.com" />
+    <!-- Form -->
+    <form wire:submit.prevent="login" class="mt-6 space-y-5">
+        <!-- Username -->
+        <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Username
+            </label>
+            <input wire:model="username" id="username" type="text" required autofocus
+                placeholder="Pakeshh Edannnn Example"
+                class="mt-2 block w-full rounded-md border border-gray-300 bg-white/5 px-4 py-3 
+                       text-gray-900 placeholder:text-gray-400 placeholder:text-center shadow-sm
+                       focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50
+                       dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 sm:text-base">
+            @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
 
         <!-- Password -->
-        <div class="relative">
-            <flux:input
-                wire:model="password"
-                label="{{ __('Password') }}"
-                type="password"
-                name="password"
-                required
-                autocomplete="current-password"
-                placeholder="Password"
-            />
-
-            @if (Route::has('password.request'))
-                <x-text-link class="absolute right-0 top-0" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </x-text-link>
-            @endif
+        <div class="mt-4">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Password
+            </label>
+            <input wire:model="password" id="password" type="password" required
+                placeholder="********"
+                class="mt-2 block w-full rounded-md border border-gray-300 bg-white/5 px-4 py-3 
+                       text-gray-900 placeholder:text-gray-400 placeholder:text-center shadow-sm
+                       focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50
+                       dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 sm:text-base">
+            @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" label="{{ __('Remember me') }}" />
-
-        <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full">{{ __('Log in') }}</flux:button>
+        <div class="flex items-center">
+            <input id="remember" wire:model="remember" type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 
+                       dark:bg-gray-700 dark:border-gray-600">
+            <label for="remember" class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                Remember me
+            </label>
         </div>
-    </form>
 
-    <div class="space-x-1 text-center text-sm text-zinc-600 dark:text-zinc-400">
-        Don't have an account?
-        <x-text-link href="{{ route('register') }}">Sign up</x-text-link>
-    </div>
+        <!-- Submit Button -->
+        <button type="submit"
+            class="w-full rounded-md bg-blue-600 px-4 py-2 text-white font-semibold shadow 
+                   hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Log in
+        </button>
+    </form>
 </div>

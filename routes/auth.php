@@ -3,9 +3,10 @@
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Livewire\Auth\LoginForm;  // ← tambahkan ini
 
 Route::middleware('guest')->group(function () {
-    Volt::route('login', 'auth.login')
+    Route::get('login', LoginForm::class)
         ->name('login');
 
     Volt::route('register', 'auth.register')
