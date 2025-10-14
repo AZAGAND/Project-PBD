@@ -36,9 +36,9 @@
             <input wire:model="password" id="password" type="password" required
                 placeholder="********"
                 class="mt-2 block w-full rounded-md border border-gray-300 bg-white/5 px-4 py-3 
-                       text-gray-900 placeholder:text-gray-400 placeholder:text-center shadow-sm
-                       focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50
-                       dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 sm:text-base">
+                        text-gray-900 placeholder:text-gray-400 placeholder:text-center shadow-sm
+                        focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50
+                        dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 sm:text-base">
             @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 

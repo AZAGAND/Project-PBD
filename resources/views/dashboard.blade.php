@@ -24,7 +24,7 @@
             </a>
 
             <a href="{{ route('master.barang') }}"
-               class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
+                class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
                 <h2 class="text-lg font-semibold mb-2">📦 Barang</h2>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     Kelola data barang.
@@ -32,7 +32,7 @@
             </a>
 
             <a href="{{ route('master.satuan') }}"
-               class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
+                class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
                 <h2 class="text-lg font-semibold mb-2">⚖️ Satuan</h2>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     Kelola data satuan barang.
@@ -40,7 +40,7 @@
             </a>
 
             <a href="{{ route('master.vendor') }}"
-               class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
+                class="p-6 rounded-xl bg-zinc-100 dark:bg-zinc-800 shadow hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
                 <h2 class="text-lg font-semibold mb-2">🏢 Vendor</h2>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     Kelola data vendor / supplier.

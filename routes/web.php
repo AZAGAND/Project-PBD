@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Auth;
 use App\Livewire\Auth\LoginForm;
 use App\Livewire\Master\RoleCrud;
 use App\Livewire\Master\UserCrud;
@@ -42,7 +43,7 @@ require __DIR__.'/auth.php';
 
 Route::prefix('master')->group(function () {
     Route::get('role',   RoleCrud::class)->name('master.role');
-    Route::get('user',   UserCrud::class)->name('master.user');   // tabel `user`
+    Route::get('user',   UserCrud::class)->name('master.user');
     Route::get('vendor', VendorCrud::class)->name('master.vendor');
     Route::get('satuan', SatuanCrud::class)->name('master.satuan');
     Route::get('barang', BarangCrud::class)->name('master.barang');
