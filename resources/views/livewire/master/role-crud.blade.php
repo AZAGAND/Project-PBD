@@ -1,10 +1,10 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
     {{-- Header --}}
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg rounded-b-2xl">
         <div class="max-w-7xl mx-auto px-6 py-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-white mb-1">Menu Manajemen Role</h1>
+                    <h1 class="text-3xl font-bold text-white mb-1">Selamat Datang di Menu Manajemen Role</h1>
                     <p class="text-blue-100 text-sm">Kelola role dan akses pengguna sistem</p>
                 </div>
                 <div class="text-right">
