@@ -1,9 +1,28 @@
 <x-layouts.app>
-    <div class="p-6 space-y-6">
-        <!-- Heading -->
-        <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-            Selamat Datang, {{ auth()->user()?->username ?? 'Guest' }} 👋
-        </h1>
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    {{-- Header --}}
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg rounded-b-2xl mt-1">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex justify-between items-center">
+                @auth
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-1">Selamat Datang di Dashsboard👋, {{ auth()->user()->username }}</h1>
+                    <p class="text-blue-100 text-sm">Kelola menu Superadmin</p>
+                    <span class="text-white text-sm text-lg">Superadmin</span>
+                </div class="flex items-center gap-4">
+                    <div class="flex flex-col text-right leading-tight">
+                        <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="border border-blue-500 text-white hover:bg-blue-100 hover:border-blue-400 hover:text-blue-600 text-sm px-4 py-2 rounded-lg shadow-sm transition duration-200">
+                        Logout
+                    </button>
+                </form>
+                    </div>
+                @endauth
+            </div>
+        </div>
+    </div>
 
         <!-- Card Navigasi -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

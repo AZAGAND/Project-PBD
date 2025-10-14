@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name') }}</title>
+    <title>{{ config('app.name', 'RSHP System') }}</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-</head>
-<body class="bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-white min-h-screen">
 
-    <!-- 🔹 Header dengan styling baru -->
-    <header class="bg-gradient-to-r from-blue-600 to-blue-300 text-white px-8 py-8 flex justify-between items-center shadow-md rounded-b-2xl">
-        <!-- Kiri: Judul dan deskripsi -->
-        <div>
-            <h1 class="text-4xl font-bold">Menu Manajemen Role</h1>
-            <p class="text-blue-100 mt-2 text-sm">Kelola role dan akses pengguna sistem</p>
+<body
+    class="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 text-gray-900 dark:text-gray-100">
+
+    {{-- @auth
+        <div class="bg-blue-900 flex justify-end p-6">
+            <div class="flex items-center gap-4">
+                <span class="text-white text-sm">👋 {{ auth()->user()->username }}</span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="border border-blue-500 text-white hover:bg-blue-100 hover:border-blue-400 hover:text-blue-600 text-sm px-4 py-2 rounded-lg shadow-sm transition duration-200">
+                        Logout
+                    </button>
+
+                </form>
+
+            </div>
         </div>
+    @endauth --}}
 
-        <!-- Kanan: Info user + logout -->
-        <div class="text-right">
-            @auth
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-medium">{{ auth()->user()->username }}</span>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit"
-                            class="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1 rounded-md transition">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            @endauth
-        </div>
-    </header>
-
-    <!-- 🔸 Konten Utama -->
-    <main class="p-6">
+    {{-- 🔸 Konten utama --}}
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-10">
         {{ $slot }}
     </main>
 
+    {{-- 🔻 Footer sticky di bawah --}}
+    <footer class="bg-blue-900 text-blue-100 text-center py-4 rounded-t-2xl shadow-inner">
+        <p class="text-sm">&copy; {{ date('Y') }} RSHP Universitas Airlangga. All rights reserved.</p>
+    </footer>
+
+
     @livewireScripts
 </body>
+
 </html>

@@ -10,11 +10,13 @@ use App\Livewire\Master\BarangCrud;
 use App\Livewire\Master\VendorCrud;
 use App\Livewire\Master\SatuanCrud;
 
+Route::get('/', function() {
+    return view('welcome');
+});
 
 Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
