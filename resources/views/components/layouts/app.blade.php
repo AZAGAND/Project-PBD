@@ -30,7 +30,7 @@
     @endauth --}}
 
     {{-- 🔸 Konten utama --}}
-    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-10">
+    <main class="flex-grow w-full">
         {{ $slot }}
     </main>
 

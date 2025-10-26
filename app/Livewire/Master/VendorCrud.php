@@ -2,66 +2,87 @@
 namespace App\Livewire\Master;
 
 use Livewire\Component;
-use App\Models\Vendor;
+use Illuminate\Support\Facades\DB;
 
 class VendorCrud extends Component
 {
-    public $nama_vendor, $badan_hukum, $status=1, $idvendor, $isEdit=false;
+    public $nama_vendor, $badan_hukum, $status = 1, $idvendor, $isEdit = false;
 
     protected $rules = [
         'nama_vendor' => 'required|string|max:100',
-        'badan_hukum' => 'required|in:P,S,U', // contoh: P=PT, S=CV/UD dll.
-        'status' => 'required|in:0,1'
+        'badan_hukum' => 'required|in:P,S,U', // contoh: P=PT, S=CV/UD, U=UMKM, dsb.
+        'status'      => 'required|in:0,1'
     ];
 
     public function render()
     {
-        return view('livewire.master.vendor-crud', [
-            'data' => Vendor::orderBy('idvendor')->get()
-        ]);
+        // Ambil semua data vendor
+        $data = DB::select('SELECT * FROM vendor ORDER BY idvendor ASC');
+        return view('livewire.master.vendor-crud', compact('data'));
     }
 
-    public function resetForm(){
-        $this->nama_vendor=''; $this->badan_hukum=''; $this->status=1; $this->idvendor=null; $this->isEdit=false;
+    public function resetForm()
+    {
+        $this->nama_vendor = '';
+        $this->badan_hukum = '';
+        $this->status = 1;
+        $this->idvendor = null;
+        $this->isEdit = false;
     }
 
     public function store()
     {
         $this->validate();
-        Vendor::create([
-            'nama_vendor'=>$this->nama_vendor,
-            'badan_hukum'=>$this->badan_hukum,
-            'status'=>$this->status
+
+        // Insert data baru
+        DB::insert('INSERT INTO vendor (nama_vendor, badan_hukum, status) VALUES (?, ?, ?)', [
+            $this->nama_vendor,
+            $this->badan_hukum,
+            $this->status
         ]);
-        session()->flash('ok','Vendor ditambahkan');
+
+        session()->flash('ok', 'Vendor ditambahkan');
         $this->resetForm();
     }
 
     public function edit($id)
     {
-        $m=Vendor::findOrFail($id);
-        $this->idvendor=$m->idvendor;
-        $this->nama_vendor=$m->nama_vendor;
-        $this->badan_hukum=$m->badan_hukum;
-        $this->status=$m->status;
-        $this->isEdit=true;
+        // Ambil data berdasarkan ID
+        $m = DB::select('SELECT * FROM vendor WHERE idvendor = ? LIMIT 1', [$id]);
+
+        if ($m) {
+            $this->idvendor     = $m[0]->idvendor;
+            $this->nama_vendor  = $m[0]->nama_vendor;
+            $this->badan_hukum  = $m[0]->badan_hukum;
+            $this->status       = $m[0]->status;
+            $this->isEdit       = true;
+        }
     }
 
     public function update()
     {
         $this->validate();
-        Vendor::where('idvendor',$this->idvendor)->update([
-            'nama_vendor'=>$this->nama_vendor,
-            'badan_hukum'=>$this->badan_hukum,
-            'status'=>$this->status
+
+        // Update data vendor
+        DB::update('UPDATE vendor SET nama_vendor = ?, badan_hukum = ?, status = ? WHERE idvendor = ?', [
+            $this->nama_vendor,
+            $this->badan_hukum,
+            $this->status,
+            $this->idvendor
         ]);
-        session()->flash('ok','Vendor diupdate');
+
+        session()->flash('ok', 'Vendor diupdate');
         $this->resetForm();
     }
 
     public function delete($id)
     {
-        try { Vendor::destroy($id); session()->flash('ok','Vendor dihapus'); }
-        catch (\Throwable $e) { session()->flash('err','Gagal hapus'); }
+        try {
+            // Hapus data vendor
+            DB::delete('DELETE FROM vendor WHERE idvendor = ?', [$id]);
+            session()->flash('ok', 'Vendor dihapus');
+        } catch (\Throwable $e) {
+            session()->flash('err', 'Gagal hapus (data mungkin dipakai tabel lain)');
+        }
     }
 }
