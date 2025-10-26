@@ -5,22 +5,28 @@
         <header class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg rounded-b-2xl">
             <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
                 @auth
-                <div class="mb-4 md:mb-0">
-                    <h1 class="text-xl md:text-2xl font-bold text-white mb-1">
-                        Selamat Datang di Menu Manajemen User 👋, {{ auth()->user()->username }}
-                    </h1>
-                    <p class="text-blue-100 text-sm">Kelola user dan akses sistem</p>
-                </div>
-
-                <div class="flex items-start md:items-end space-x-4">
-                    <div class="text-right">
-                        <p class="text-white font-semibold text-sm leading-tight">
-                            Role: {{ auth()->user()->role->nama_role ?? 'User' }}
-                        </p>
-                        <p class="text-blue-200 text-[11px] leading-tight">{{ now()->format('d M Y') }}</p>
+                    <div class="mb-4 md:mb-0">
+                        <h1 class="text-xl md:text-2xl font-bold text-white mb-1">
+                            Selamat Datang di Menu Manajemen User 👋, {{ auth()->user()->username }}
+                        </h1>
+                        <p class="text-blue-100 text-sm">Kelola user dan akses sistem</p>
                     </div>
-                </div>
-            @endauth
+
+                    <div class="flex items-start md:items-end space-x-4">
+                        <div class="text-right">
+                            <p class="text-white font-semibold text-sm leading-tight">
+                                Role: {{ auth()->user()->role->nama_role ?? 'User' }}
+                            </p>
+                            <p class="text-blue-200 text-[11px] leading-tight">{{ now()->format('d M Y') }}</p>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="border border-blue-500 text-white hover:bg-blue-100 hover:border-blue-400 hover:text-blue-600 text-sm px-4 py-2 rounded-lg shadow-sm transition duration-200">
+                                    Logout
+                                </button>
+                        </div>
+                    </div>
+                @endauth
             </div>
         </header>
 
