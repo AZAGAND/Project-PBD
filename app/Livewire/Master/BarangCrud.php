@@ -8,6 +8,8 @@ use App\Models\Satuan;
 
 class BarangCrud extends Component
 {
+    protected $listeners = ['edit', 'resetForm'];
+
     public $jenis, $nama, $idsatuan, $harga, $status = 1, $idbarang, $isEdit = false;
 
     protected $rules = [
@@ -43,37 +45,51 @@ class BarangCrud extends Component
         $this->status = 1;
         $this->idbarang = null;
         $this->isEdit = false;
+
+        $this->dispatch('show-modal');
     }
 
     public function store()
     {
         $this->validate();
 
-        DB::insert(
-            "INSERT INTO barang (jenis, nama, idsatuan, harga, status) VALUES (?, ?, ?, ?, ?)",
-            [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status]
+        // DB::insert(
+        //     "INSERT INTO barang (jenis, nama, idsatuan, harga, status) VALUES (?, ?, ?, ?, ?)",
+        //     [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status]
+
+        DB::statement("CALL sp_insert_barang(?, ?, ?, ?, ?)", [
+            $this->jenis,
+            $this->nama,
+            $this->idsatuan,
+            $this->harga,
+            $this->status
+        ]
         );
 
         session()->flash('ok', 'Barang berhasil ditambahkan!');
         $this->resetForm();
+
+          $this->dispatch('close-modal');
     }
 
-    public function edit($id)
-    {
-        $barang = DB::selectOne("SELECT * FROM barang WHERE idbarang = ?", [$id]);
+        public function edit($id)
+        {
+            $barang = DB::selectOne("SELECT * FROM barang WHERE idbarang = ?", [$id]);
 
-        if ($barang) {
-            $this->idbarang = $barang->idbarang;
-            $this->jenis = $barang->jenis;
-            $this->nama = $barang->nama;
-            $this->idsatuan = $barang->idsatuan;
-            $this->harga = $barang->Harga;
-            $this->status = $barang->status;
-            $this->isEdit = true;
-        } else {
-            session()->flash('err', 'Data barang tidak ditemukan!');
+            if ($barang) {
+                $this->idbarang = $barang->idbarang;
+                $this->jenis = $barang->jenis;
+                $this->nama = $barang->nama;
+                $this->idsatuan = $barang->idsatuan;
+                $this->harga = $barang->Harga;
+                $this->status = $barang->status;
+                $this->isEdit = true;
+
+                $this->dispatch('show-modal');
+            } else {
+                session()->flash('err', 'Data barang tidak ditemukan!');
+            }
         }
-    }
 
     public function cancel()
     {
@@ -86,15 +102,26 @@ class BarangCrud extends Component
     {
         $this->validate();
 
-        DB::update(
-            "UPDATE barang 
-                SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
-                WHERE idbarang = ?",
-            [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
+        // DB::update(
+        //     "UPDATE barang 
+        //         SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
+        //         WHERE idbarang = ?",
+        //     [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
+
+            DB::statement("CALL sp_update_barang(?, ?, ?, ?, ?, ?)", [
+                $this->idbarang,
+                $this->jenis,
+                $this->nama,
+                $this->idsatuan,
+                $this->harga,
+                $this->status
+            ]
         );
 
         session()->flash('ok', 'Barang berhasil diupdate!');
         $this->resetForm();
+
+          $this->dispatch('close-modal');
     }
 
     public function delete($id)
