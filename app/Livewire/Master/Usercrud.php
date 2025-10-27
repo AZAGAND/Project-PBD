@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserCrud extends Component
 {
+    protected $listeners = ['edit', 'resetForm'];
     public $username, $password, $idrole, $iduser, $isEdit = false;
 
     protected $rules = [
@@ -56,6 +57,7 @@ class UserCrud extends Component
 
         session()->flash('ok', 'User ditambahkan');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function edit($id)
@@ -69,6 +71,10 @@ class UserCrud extends Component
             $this->password = ''; // tidak diisi ulang untuk keamanan
             $this->idrole   = $u[0]->idrole;
             $this->isEdit   = true;
+
+            $this->dispatch('show-modal');
+        } else {
+            session()->flash('err', 'Data user tidak ditemukan');
         }
     }
 
@@ -93,6 +99,7 @@ class UserCrud extends Component
 
         session()->flash('ok', 'User diupdate');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function delete($id)

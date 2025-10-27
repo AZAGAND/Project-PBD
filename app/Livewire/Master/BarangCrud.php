@@ -69,7 +69,7 @@ class BarangCrud extends Component
         session()->flash('ok', 'Barang berhasil ditambahkan!');
         $this->resetForm();
 
-          $this->dispatch('close-modal');
+        $this->dispatch('close-modal');
     }
 
         public function edit($id)
