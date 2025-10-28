@@ -107,6 +107,7 @@ class UserCrud extends Component
         try {
             // Hapus data user berdasarkan ID
             DB::delete('DELETE FROM user WHERE iduser = ?', [$id]);
+            db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'User dihapus');
         } catch (\Throwable $e) {
             session()->flash('err', 'Gagal hapus (dipakai data lain)');

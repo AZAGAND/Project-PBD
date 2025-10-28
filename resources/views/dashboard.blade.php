@@ -7,7 +7,7 @@
                 @auth
                     <div class="mb-4 md:mb-0">
                         <h1 class="text-xl md:text-2xl font-bold text-white mb-1">
-                            Selamat Datang di Menu Manajemen User 👋, {{ auth()->user()->username }}
+                            Selamat Datang di Menu Dashboard Superadmin 👋, {{ auth()->user()->username }}
                         </h1>
                         <p class="text-blue-100 text-sm">Kelola user dan akses sistem</p>
                     </div>
@@ -40,7 +40,7 @@
                     {{-- === CARD: ROLE === --}}
                     <a href="{{ route('master.role') }}"
                         class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-blue-500
-                               hover:border-blue-600 hover:-translate-y-1 transition-all duration-300">
+                                hover:border-blue-600 hover:-translate-y-1 transition-all duration-300">
                         <div class="flex items-center space-x-3 mb-3">
                             <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
                                 <span class="text-2xl">📌</span>

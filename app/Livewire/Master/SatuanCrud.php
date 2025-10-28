@@ -26,6 +26,8 @@ class SatuanCrud extends Component
         $this->status = 1;
         $this->idsatuan = null;
         $this->isEdit = false;
+
+        $this->dispatch('show-modal');
     }
 
     public function store()
@@ -40,6 +42,8 @@ class SatuanCrud extends Component
 
         session()->flash('ok', 'Satuan ditambahkan');
         $this->resetForm();
+
+        $this->dispatch('close-modal');
     }
 
     public function edit($id)
@@ -53,6 +57,7 @@ class SatuanCrud extends Component
             $this->status = $m[0]->status;
             $this->isEdit = true;
         }
+        $this->dispatch('show-modal');
     }
 
     public function update()
@@ -68,6 +73,7 @@ class SatuanCrud extends Component
 
         session()->flash('ok', 'Satuan diupdate');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function delete($id)
@@ -75,6 +81,7 @@ class SatuanCrud extends Component
         try {
             // Hapus data
             DB::delete('DELETE FROM satuan WHERE idsatuan = ?', [$id]);
+            db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'Satuan dihapus');
         } catch (\Throwable $e) {
             session()->flash('err', 'Gagal hapus (dipakai di barang)');

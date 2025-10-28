@@ -107,7 +107,93 @@
                                     <td class="px-4 py-3 font-medium text-gray-800">Rp {{ number_format($b->Harga, 0, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $b->status ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
-                                            {{ $b->status ? 'Aktif' : 'Nonaktif' }}
+                                            {{ $b->status ? 'Tersedia' : "Tidak Tersedia" }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button type="button" wire:click="edit({{ $b->idbarang }})"
+                                                @click="$wire.edit({{ $b->idbarang }}).then(() => openModal())"
+                                                class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                ✏️ Edit
+                                            </button>
+                                            <button onclick="confirmDelete({{ $b->idbarang }}, '{{ $b->nama }}')"
+                                                class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                🗑️ Hapus
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="px-4 py-12 text-center">
+                                        <div class="flex flex-col items-center justify-center text-gray-500">
+                                            <svg class="w-16 h-16 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                            </svg>
+                                            <p class="font-medium text-sm">Tidak ada data barang</p>
+                                            <p class="text-xs text-gray-400 mt-1">Klik tombol "Tambah Barang" untuk menambahkan data</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            {{-- ========== TABLE Deleted_At ========== --}}
+            <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
+                <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-5 border-b border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-indigo-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800">Deleted At</h2>
+                            <p class="text-xs text-gray-600">Total: <span class="font-semibold">{{ count($data) }}</span> data</p>
+                        </div>
+                    </div>
+
+                    <button type="button" wire:click="resetForm" @click="$wire.resetForm().then(() => openModal())"
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        <span class="inline-flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Tambah Barang
+                        </span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">ID</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">Jenis</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">Nama</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">Satuan</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">Harga</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-center font-bold text-xs text-gray-700 uppercase">Status</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-center font-bold text-xs text-gray-700 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @forelse ($data as $b)
+                                <tr class="hover:bg-blue-50 transition">
+                                    <td class="px-4 py-3">{{ $b->idbarang }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">{{ $b->jenis }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">{{ $b->nama }}</td>
+                                    <td class="px-4 py-3 text-gray-600">{{ $b->nama_satuan ?? '-' }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">Rp {{ number_format($b->Harga, 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $b->status ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
+                                            {{ $b->status ? 'Tersedia' : "Tidak Tersedia" }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-center">
@@ -243,8 +329,8 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
                         <select wire:model.defer="status"
                             class="w-full px-3 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition">
-                            <option value="1">Aktif</option>
-                            <option value="0">Nonaktif</option>
+                            <option value="1">Tersedia</option>
+                            <option value="0">Tidak  Tersedia</option>
                         </select>
                     </div>
                 </div>

@@ -21,22 +21,23 @@ class RoleCrud extends Component
         $this->nama_role = '';
         $this->idrole = null;
         $this->isEdit = false;
+
+        $this->dispatch('close-modal');
     }
 
     public function store()
     {
         $this->validate();
 
-        // pakai native SQL INSERT
         DB::insert('INSERT INTO role (nama_role) VALUES (?)', [$this->nama_role]);
 
         session()->flash('ok', 'Role ditambahkan');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function edit($id)
     {
-        // pakai native SQL SELECT WHERE
         $m = DB::select('SELECT * FROM role WHERE idrole = ? LIMIT 1', [$id]);
 
         if ($m) {
@@ -44,6 +45,7 @@ class RoleCrud extends Component
             $this->nama_role = $m[0]->nama_role;
             $this->isEdit = true;
         }
+        $this->dispatch('show-modal');
     }
 
     public function update()
@@ -56,12 +58,14 @@ class RoleCrud extends Component
 
         session()->flash('ok', 'Role diupdate');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function delete($id)
     {
         try {
             DB::delete('DELETE FROM role WHERE idrole = ?', [$id]);
+            db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'Role dihapus');
         } catch (\Throwable $e) {
             session()->flash('err', 'Gagal hapus (dipakai data lain)');

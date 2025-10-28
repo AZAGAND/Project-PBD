@@ -103,7 +103,7 @@ class BarangCrud extends Component
         $this->validate();
 
         // DB::update(
-        //     "UPDATE barang 
+        //     "UPDATE barang
         //         SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
         //         WHERE idbarang = ?",
         //     [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
@@ -128,6 +128,7 @@ class BarangCrud extends Component
     {
         try {
             DB::delete("DELETE FROM barang WHERE idbarang = ?", [$id]);
+            db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'Barang berhasil dihapus!');
         } catch (\Throwable $e) {
             session()->flash('err', 'Gagal menghapus barang: ' . $e->getMessage());

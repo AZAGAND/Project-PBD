@@ -28,6 +28,8 @@ class VendorCrud extends Component
         $this->status = 1;
         $this->idvendor = null;
         $this->isEdit = false;
+
+        $this->dispatch('show-modal');
     }
 
     public function store()
@@ -43,6 +45,7 @@ class VendorCrud extends Component
 
         session()->flash('ok', 'Vendor ditambahkan');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function edit($id)
@@ -57,6 +60,7 @@ class VendorCrud extends Component
             $this->status       = $m[0]->status;
             $this->isEdit       = true;
         }
+        $this->dispatch('show-modal');
     }
 
     public function update()
@@ -73,6 +77,7 @@ class VendorCrud extends Component
 
         session()->flash('ok', 'Vendor diupdate');
         $this->resetForm();
+        $this->dispatch('close-modal');
     }
 
     public function delete($id)
@@ -80,6 +85,7 @@ class VendorCrud extends Component
         try {
             // Hapus data vendor
             DB::delete('DELETE FROM vendor WHERE idvendor = ?', [$id]);
+            db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'Vendor dihapus');
         } catch (\Throwable $e) {
             session()->flash('err', 'Gagal hapus (data mungkin dipakai tabel lain)');
