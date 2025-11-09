@@ -16,8 +16,14 @@ class SatuanCrud extends Component
     public function render()
     {
         // Ambil semua data satuan
-        $data = DB::select('SELECT * FROM satuan ORDER BY idsatuan ASC');
-        return view('livewire.master.satuan-crud', compact('data'));
+        // $data = DB::select('SELECT * FROM satuan ORDER BY idsatuan ASC');
+
+        $data = db::select("select * from view_satuan");
+        $dataaktif = db::select("select * from viewsatuan_aktif");
+        return view('livewire.master.satuan-crud', [
+            'data' => $data,
+            'dataaktif' => $dataaktif
+        ]);
     }
 
     public function resetForm()

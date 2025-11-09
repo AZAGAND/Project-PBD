@@ -57,7 +57,87 @@
                 </div>
             @endif
 
-            {{-- ========== TABLE SECTION ========== --}}
+            {{-- ========== Tabel satuan Aktif ========== --}}
+            <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
+                <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-5 border-b border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-indigo-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800">Daftar Satuan</h2>
+                            <p class="text-xs text-gray-600">Total: <span class="font-semibold">{{ count($data) }}</span> satuan</p>
+                        </div>
+                    </div>
+
+                    <button type="button" wire:click="resetForm" @click="$wire.resetForm().then(() => openModal())"
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        <span class="inline-flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Tambah Satuan
+                        </span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">ID</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-left font-bold text-xs text-gray-700 uppercase">Nama Satuan</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-center font-bold text-xs text-gray-700 uppercase">Status</th>
+                                <th class="px-4 py-3 border-b-2 border-gray-200 text-center font-bold text-xs text-gray-700 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @forelse($dataaktif as $s)
+                                <tr class="hover:bg-blue-50 transition">
+                                    <td class="px-4 py-3">{{ $s->idsatuan }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">{{ $s->nama_satuan }}</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $s->STATUS ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
+                                            {{ $s->STATUS ? 'Aktif' : 'Nonaktif' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button type="button" wire:click="edit({{ $s->idsatuan }})"
+                                                @click="$wire.edit({{ $s->idsatuan }}).then(() => openModal())"
+                                                class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                ✏️ Edit
+                                            </button>
+                                            <button onclick="confirmDelete({{ $s->idsatuan }}, '{{ $s->nama_satuan }}')"
+                                                class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                🗑️ Hapus
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-12 text-center">
+                                        <div class="flex flex-col items-center justify-center text-gray-500">
+                                            <svg class="w-16 h-16 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            <p class="font-medium text-sm">Belum ada data satuan</p>
+                                            <p class="text-xs text-gray-400 mt-1">Klik tombol "Tambah Satuan" untuk menambahkan data</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            {{-- ========== Tabel semua satuan========== --}}
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
                 <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-5 border-b border-gray-200 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
@@ -100,8 +180,8 @@
                                     <td class="px-4 py-3">{{ $s->idsatuan }}</td>
                                     <td class="px-4 py-3 font-medium text-gray-800">{{ $s->nama_satuan }}</td>
                                     <td class="px-4 py-3 text-center">
-                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $s->status ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
-                                            {{ $s->status ? 'Aktif' : 'Nonaktif' }}
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $s->STATUS ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
+                                            {{ $s->STATUS ? 'Aktif' : 'Nonaktif' }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-center">

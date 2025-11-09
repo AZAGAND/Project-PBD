@@ -57,7 +57,7 @@
                 </div>
             @endif
 
-            {{-- ========== TABLE ========== --}}
+            {{-- ========== Tabel Barang Aktif ========== --}}
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
                 <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-5 border-b border-gray-200 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
@@ -68,7 +68,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-gray-800">Daftar Barang</h2>
+                            <h2 class="text-lg font-bold text-gray-800">Daftar Barang Aktif</h2>
                             <p class="text-xs text-gray-600">Total: <span class="font-semibold">{{ count($data) }}</span> data</p>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                                     <td class="px-4 py-3 font-medium text-gray-800">{{ $b->jenis }}</td>
                                     <td class="px-4 py-3 font-medium text-gray-800">{{ $b->nama }}</td>
                                     <td class="px-4 py-3 text-gray-600">{{ $b->nama_satuan ?? '-' }}</td>
-                                    <td class="px-4 py-3 font-medium text-gray-800">Rp {{ number_format($b->Harga, 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">Rp {{ number_format($b->harga, 0, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $b->status ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
                                             {{ $b->status ? 'Tersedia' : "Tidak Tersedia" }}
@@ -143,7 +143,7 @@
                 </div>
             </section>
 
-            {{-- ========== TABLE Deleted_At ========== --}}
+            {{-- ========== Tabel Semua Barang ========== --}}
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
                 <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-5 border-b border-gray-200 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
@@ -154,20 +154,10 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-gray-800">Deleted At</h2>
+                            <h2 class="text-lg font-bold text-gray-800">Daftar Semua Barang</h2>
                             <p class="text-xs text-gray-600">Total: <span class="font-semibold">{{ count($data) }}</span> data</p>
                         </div>
                     </div>
-
-                    <button type="button" wire:click="resetForm" @click="$wire.resetForm().then(() => openModal())"
-                        class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-                        <span class="inline-flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Tambah Barang
-                        </span>
-                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -184,7 +174,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            @forelse ($data as $b)
+                            @forelse ($semuaData as $b)
                                 <tr class="hover:bg-blue-50 transition">
                                     <td class="px-4 py-3">{{ $b->idbarang }}</td>
                                     <td class="px-4 py-3 font-medium text-gray-800">{{ $b->jenis }}</td>

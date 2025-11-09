@@ -27,12 +27,15 @@ class BarangCrud extends Component
         //     'satuans' => Satuan::orderBy('nama_satuan')->get()
         // ]);
 
-        $Data = DB::select("Select * From view_barang_satuan");
+        $Data = DB::select("Select * From viewsbrg_aktif");
+        $semuaData = DB::select("Select * from view_barang_satuan");
         $Satuan = DB::select("Select * From satuan Order By nama_satuan");
 
         return view('livewire.master.barang-crud', [
             'data' => $Data,
+            'semuaData' => $semuaData,
             'satuan' => $Satuan
+            
         ]);
     }
 
@@ -53,17 +56,17 @@ class BarangCrud extends Component
     {
         $this->validate();
 
-        // DB::insert(
-        //     "INSERT INTO barang (jenis, nama, idsatuan, harga, status) VALUES (?, ?, ?, ?, ?)",
-        //     [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status]
+        DB::insert(
+            "INSERT INTO barang (jenis, nama, idsatuan, harga, status) VALUES (?, ?, ?, ?, ?)",
+            [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status]
 
-        DB::statement("CALL sp_insert_barang(?, ?, ?, ?, ?)", [
-            $this->jenis,
-            $this->nama,
-            $this->idsatuan,
-            $this->harga,
-            $this->status
-        ]
+        // DB::statement("CALL sp_insert_barang(?, ?, ?, ?, ?)", [
+        //     $this->jenis,
+        //     $this->nama,
+        //     $this->idsatuan,
+        //     $this->harga,
+        //     $this->status
+        // ]
         );
 
         session()->flash('ok', 'Barang berhasil ditambahkan!');
@@ -81,7 +84,7 @@ class BarangCrud extends Component
                 $this->jenis = $barang->jenis;
                 $this->nama = $barang->nama;
                 $this->idsatuan = $barang->idsatuan;
-                $this->harga = $barang->Harga;
+                $this->harga = $barang->harga;
                 $this->status = $barang->status;
                 $this->isEdit = true;
 
@@ -102,26 +105,26 @@ class BarangCrud extends Component
     {
         $this->validate();
 
-        // DB::update(
-        //     "UPDATE barang
-        //         SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
-        //         WHERE idbarang = ?",
-        //     [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
+        DB::update(
+            "UPDATE barang
+                SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
+                WHERE idbarang = ?",
+            [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
 
-            DB::statement("CALL sp_update_barang(?, ?, ?, ?, ?, ?)", [
-                $this->idbarang,
-                $this->jenis,
-                $this->nama,
-                $this->idsatuan,
-                $this->harga,
-                $this->status
-            ]
+            // DB::statement("CALL sp_update_barang(?, ?, ?, ?, ?, ?)", [
+            //     $this->idbarang,
+            //     $this->jenis,
+            //     $this->nama,
+            //     $this->idsatuan,
+            //     $this->harga,
+            //     $this->status
+            // ]
         );
 
         session()->flash('ok', 'Barang berhasil diupdate!');
         $this->resetForm();
 
-          $this->dispatch('close-modal');
+        $this->dispatch('close-modal');
     }
 
     public function delete($id)

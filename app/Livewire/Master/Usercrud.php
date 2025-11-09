@@ -19,15 +19,17 @@ class UserCrud extends Component
     public function render()
     {
         // Ambil semua data user beserta role-nya
-        $data = DB::select("
-            SELECT u.*, r.nama_role 
-            FROM user u 
-            JOIN role r ON u.idrole = r.idrole 
-            ORDER BY u.iduser ASC
-        ");
+        // $data = DB::select("
+        //     SELECT u.*, r.nama_role 
+        //     FROM user u 
+        //     JOIN role r ON u.idrole = r.idrole 
+        //     ORDER BY u.iduser ASC
+        // ");
 
-        // Ambil daftar role untuk select option
-        $roles = DB::select('SELECT * FROM role ORDER BY nama_role ASC');
+        $data = db::select("select * from view_users");
+
+        // $roles = DB::select('SELECT * FROM role ORDER BY nama_role ASC');
+        $roles = db::select("select * from views_role");
 
         return view('livewire.master.user-crud', compact('data', 'roles'));
     }
@@ -45,10 +47,8 @@ class UserCrud extends Component
     {
         $this->validate();
 
-        // Hash password jika diisi
         $hashedPassword = $this->password ? Hash::make($this->password) : null;
 
-        // Insert user baru
         DB::insert('INSERT INTO user (username, password, idrole) VALUES (?, ?, ?)', [
             $this->username,
             $hashedPassword,
@@ -62,13 +62,12 @@ class UserCrud extends Component
 
     public function edit($id)
     {
-        // Ambil data user berdasarkan id
         $u = DB::select('SELECT * FROM user WHERE iduser = ? LIMIT 1', [$id]);
 
         if ($u) {
             $this->iduser   = $u[0]->iduser;
             $this->username = $u[0]->username;
-            $this->password = ''; // tidak diisi ulang untuk keamanan
+            $this->password = '';
             $this->idrole   = $u[0]->idrole;
             $this->isEdit   = true;
 
@@ -82,7 +81,6 @@ class UserCrud extends Component
     {
         $this->validate();
 
-        // Siapkan payload update
         $params = [$this->username, $this->idrole, $this->iduser];
         $query  = 'UPDATE user SET username = ?, idrole = ?';
 
@@ -94,7 +92,6 @@ class UserCrud extends Component
             $query .= ' WHERE iduser = ?';
         }
 
-        // Eksekusi update
         DB::update($query, $params);
 
         session()->flash('ok', 'User diupdate');
@@ -105,7 +102,6 @@ class UserCrud extends Component
     public function delete($id)
     {
         try {
-            // Hapus data user berdasarkan ID
             DB::delete('DELETE FROM user WHERE iduser = ?', [$id]);
             db::delete("CALL `Global_Reset_Auto_Increment`()");
             session()->flash('ok', 'User dihapus');

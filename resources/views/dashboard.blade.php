@@ -7,7 +7,7 @@
                 @auth
                     <div class="mb-4 md:mb-0">
                         <h1 class="text-xl md:text-2xl font-bold text-white mb-1">
-                            Selamat Datang di Menu Dashboard Superadmin 👋, {{ auth()->user()->username }}
+                            Selamat Datang di Menu Dashboard {{ auth()->user()->role->nama_role ?? 'User' }} 👋, {{ auth()->user()->username }}
                         </h1>
                         <p class="text-blue-100 text-sm">Kelola user dan akses sistem</p>
                     </div>

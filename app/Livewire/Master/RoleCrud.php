@@ -12,7 +12,9 @@ class RoleCrud extends Component
 
     public function render()
     {
-        $data = DB::select('SELECT * FROM role ORDER BY idrole ASC');
+        // $data = DB::select('SELECT * FROM role ORDER BY idrole ASC');
+
+        $data = db::select("select * from views_role");
         return view('livewire.master.role-crud', compact('data'));
     }
 
