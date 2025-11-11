@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,9 @@ use App\Livewire\Master\UserCrud;
 use App\Livewire\Master\BarangCrud;
 use App\Livewire\Master\VendorCrud;
 use App\Livewire\Master\SatuanCrud;
+use App\Livewire\Master\MarginPenjualan;
+use App\Livewire\Master\Pengadaan;
+use App\Livewire\Master\DetailPengadaan;
 
 Route::get('/', function() {
     return view('welcome');
@@ -49,4 +53,10 @@ Route::prefix('master')->group(function () {
     Route::get('vendor', VendorCrud::class)->name('master.vendor');
     Route::get('satuan', SatuanCrud::class)->name('master.satuan');
     Route::get('barang', BarangCrud::class)->name('master.barang');
+    route::get('MarginPenjualan', MarginPenjualan::class)->name('master.marginPenjualan');
+});
+
+route::prefix('transaction')->group(function(){
+    route::get('pengadaan', Pengadaan::class)->name('master.pengadaan');
+    Route::get('pengadaan/{id}/detail', DetailPengadaan::class)->name('transaction.pengadaan.detail');
 });

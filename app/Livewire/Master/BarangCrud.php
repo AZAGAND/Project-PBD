@@ -3,8 +3,6 @@ namespace App\Livewire\Master;
 use Illuminate\Support\Facades\DB;
 
 use Livewire\Component;
-use App\Models\Barang;
-use App\Models\Satuan;
 
 class BarangCrud extends Component
 {
