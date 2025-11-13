@@ -116,7 +116,7 @@
                     </a>
 
                     {{-- === CARD: TRANSACTION === --}}
-                    <a href="{{ route('master.pengadaan') }}"
+                    <a href="{{ route('transaction.pengadaan') }}"
                         class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-purple-500
                                 hover:border-purple-600 hover:-translate-y-1 transition-all duration-300">
                         <div class="flex items-center space-x-3 mb-3">

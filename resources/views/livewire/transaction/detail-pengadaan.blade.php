@@ -240,7 +240,7 @@
 
             {{-- ========== BACK BUTTON ========== --}}
             <div class="text-center">
-                <a href="{{ route('master.pengadaan') }}"
+                <a href="{{ route('transaction.pengadaan') }}"
                     class="inline-flex items-center px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl border-2 border-gray-300 shadow-sm hover:shadow transition-all duration-200">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

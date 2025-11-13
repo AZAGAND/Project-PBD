@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Master;
+namespace App\Livewire\Transaction;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;

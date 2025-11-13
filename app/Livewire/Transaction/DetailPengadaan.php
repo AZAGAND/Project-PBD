@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Master;
+namespace App\Livewire\Transaction;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +39,6 @@ class DetailPengadaan extends Component
             WHERE d.idpengadaan = ?
         ", [$id]);
 
-        // ✅ dropdown barang native SQL
         $this->barangList = DB::select("
             SELECT b.*, s.nama_satuan
             FROM barang b

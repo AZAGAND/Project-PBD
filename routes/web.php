@@ -11,8 +11,10 @@ use App\Livewire\Master\BarangCrud;
 use App\Livewire\Master\VendorCrud;
 use App\Livewire\Master\SatuanCrud;
 use App\Livewire\Master\MarginPenjualan;
-use App\Livewire\Master\Pengadaan;
-use App\Livewire\Master\DetailPengadaan;
+use App\Livewire\Transaction\Pengadaan;
+use App\Livewire\Transaction\DetailPengadaan;
+use App\Livewire\Transaction\Penerimaan;
+
 
 Route::get('/', function() {
     return view('welcome');
@@ -57,6 +59,7 @@ Route::prefix('master')->group(function () {
 });
 
 route::prefix('transaction')->group(function(){
-    route::get('pengadaan', Pengadaan::class)->name('master.pengadaan');
+    route::get('pengadaan', Pengadaan::class)->name('transaction.pengadaan');
     Route::get('pengadaan/{id}/detail', DetailPengadaan::class)->name('transaction.pengadaan.detail');
+    route::get('Penerimaan', Penerimaan::class)->name('transaction.Penerimaan');
 });
