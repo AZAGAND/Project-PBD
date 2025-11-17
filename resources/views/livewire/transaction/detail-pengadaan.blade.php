@@ -79,11 +79,11 @@
                     </div>
                     @php
                         $statusConfig = [
-                            'A' => ['label' => 'Pending', 'class' => 'bg-amber-100 text-amber-700'],
-                            'B' => ['label' => 'Disetujui', 'class' => 'bg-emerald-100 text-emerald-700'],
-                            'C' => ['label' => 'Ditolak', 'class' => 'bg-rose-100 text-rose-700'],
+                            'P' => ['label' => 'Pending', 'class' => 'bg-amber-100 text-amber-700'],
+                            'D' => ['label' => 'Done', 'class' => 'bg-emerald-100 text-emerald-700'],
+                            'C' => ['label' => 'Canceled', 'class' => 'bg-rose-100 text-rose-700'],
                         ];
-                        $status = $statusConfig[$pengadaan->status ?? 'A'] ?? [
+                        $status = $statusConfig[$pengadaan->status ?? 'P'] ?? [
                             'label' => 'Unknown',
                             'class' => 'bg-gray-100 text-gray-700',
                         ];
@@ -120,7 +120,7 @@
 
             {{-- ========== Tombol Tambah Item ========== --}}
             <div class="flex justify-end">
-                <button type="button" onclick="openModal()"
+                <button wire:click="resetForm" @click="$wire.resetForm().then(() => openModal())"
                     class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -191,8 +191,8 @@
                                         {{ number_format($d->sub_total, 0, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center gap-2">
-                                            <button type="button" wire:click="edit({{ $d->iddetail_pengadaan }})"
-                                                @click="openModal()"
+                                            <button wire:click="edit({{ $d->iddetail_pengadaan }})"
+                                                @click="$wire.edit({{ $d->iddetail_pengadaan }}).then(() => openModal())"
                                                 class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
                                                 ✏️ Edit
                                             </button>
@@ -253,93 +253,89 @@
         </div>
     </main>
 
-    {{-- ================= MODAL FORM TAMBAH/EDIT ITEM ================= --}}
-    <div id="modalBackdrop" wire:ignore class="fixed inset-0 hidden z-40 transition-opacity duration-300 opacity-0"
+    <!-- ================= BACKDROP ================= -->
+     <div id="modalBackdrop" wire:ignore class="fixed inset-0 hidden z-40 transition-opacity duration-300 opacity-0"
         style="background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(6px);">
     </div>
 
-    <div id="modalContainer" wire:ignore class="fixed inset-0 flex justify-center items-center hidden z-50 p-4">
-        <div id="modalContent"
-            class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl transform transition-all duration-300 scale-95 opacity-0 border-t-4 border-blue-600"
+    <!-- ================= MODAL FORM ================= -->
+    <div id="modalContainer" wire:ignore.self class="fixed inset-0 flex justify-center items-center hidden z-50 p-4">
+
+        <div id="modalContent" wire:ignore.self
+            class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl transform transition-all duration-300 
+                scale-95 opacity-0 border-t-4 border-blue-600"
             onclick="event.stopPropagation()">
 
-            {{-- Header Modal --}}
-            <div
-                class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-gray-200 rounded-t-2xl flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">
-                            {{ $isEdit ? 'Edit Item Barang' : 'Tambah Item Barang' }}</h3>
-                        <p class="text-xs text-gray-500">
-                            {{ $isEdit ? 'Perbarui data item' : 'Tambah item baru ke pengadaan' }}</p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeModal()"
-                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-gray-200 rounded-t-2xl flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-gray-800">
+                    {{ $isEdit ? 'Edit Item Pengadaan' : 'Tambah Item Pengadaan' }}
+                </h3>
+                <p class="text-xs text-gray-500">
+                    {{ $isEdit ? 'Perbarui data item pengadaan' : 'Tambah item baru' }}
+                </p>
             </div>
+            <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all">
+                ❌
+            </button>
+        </div>
 
-            {{-- Form Content --}}
             <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}" class="p-6 space-y-4">
 
-                <select wire:model.live="idbarang" id="focusBarang"
-                    class="w-full px-3 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition">
+                <!-- Dropdown Barang -->
+                <select wire:model.live="idbarang"
+                    class="w-full px-3 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl 
+                        focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                     <option value="">-- Pilih Barang --</option>
                     @foreach ($barangList as $b)
-                        <option value="{{ $b->idbarang }}">
-                            {{ $b->nama }} — {{ $b->satuan->nama_satuan ?? '' }}
-                            (Rp {{ number_format($b->harga, 0, ',', '.') }})
-                        </option>
+                        <option value="{{ $b->idbarang }}">{{ $b->nama }}</option>
                     @endforeach
                 </select>
 
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jumlah</label>
-                        <input type="number" wire:model.defer="jumlah" min="1"
-                            class="w-full px-3 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500">
-                        @error('jumlah')
-                            <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Harga Satuan (Rp)</label>
-                        <input type="number" wire:model="harga_satuan" readonly
-                            class="w-full px-3 py-2 bg-gray-100 border-2 border-gray-200 rounded-xl font-semibold" />
-                        @error('harga_satuan')
-                            <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Subtotal</label>
-                        <input type="text"
-                            value="Rp {{ number_format(($jumlah ?? 0) * ($harga_satuan ?? 0), 0, ',', '.') }}"
-                            readonly
-                            class="w-full px-3 py-2 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-700 font-semibold cursor-not-allowed">
-                    </div>
+                <!-- Nama Satuan -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Satuan</label>
+                    <input type="text" wire:model="nama_satuan"
+                        class="w-full px-3 py-2 bg-gray-100 border-2 border-gray-200 rounded-xl"
+                        value="{{ $nama_satuan }}" readonly>
                 </div>
 
+                <!-- Harga Satuan -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Harga Satuan</label>
+                    <input type="text" wire:model="harga_satuan"
+                        class="w-full px-3 py-2 bg-gray-100 border-2 border-gray-200 rounded-xl"
+                        value="Rp {{ number_format($harga_satuan, 0, ',', '.') }}" readonly>
+                </div>
+
+                <!-- Jumlah -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jumlah</label>
+                    <input type="number" wire:model.live="jumlah" min="0"
+                        class="w-full px-3 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl
+                            focus:border-blue-500 focus:ring-blue-100">
+                </div>
+
+                <!-- Total -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Total</label>
+                    <input type="text" wire:model="total_harga" readonly
+                        class="w-full px-3 py-2 bg-indigo-50 border-2 border-indigo-200 
+                            rounded-xl font-bold text-indigo-700"
+                        value="Rp {{ number_format($total_harga, 0, ',', '.') }}">
+                </div>
+
+                <!-- BUTTONS -->
                 <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
                     <button type="button" onclick="closeModal()"
-                        class="px-5 py-2.5 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50">
+                        class="px-5 py-2.5 bg-white border-2 border-gray-300 text-gray-700 font-semibold 
+                            rounded-xl hover:bg-gray-50">
                         Batal
                     </button>
 
                     <button type="submit"
-                        class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl shadow hover:shadow-xl">
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white 
+                            px-5 py-2.5 rounded-xl shadow hover:shadow-xl">
                         {{ $isEdit ? 'Update Item' : 'Simpan Item' }}
                     </button>
                 </div>
@@ -348,6 +344,8 @@
 
         </div>
     </div>
+
+
 
     {{-- ================= MODAL KONFIRMASI HAPUS ================= --}}
     <div id="deleteModalBackdrop" wire:ignore

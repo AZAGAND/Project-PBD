@@ -536,7 +536,6 @@
         });
     });
 
-    // Listen for Livewire events - Compatible with Livewire 2 & 3
     if (window.Livewire) {
         // Livewire 3
         if (typeof Livewire.on === 'function') {

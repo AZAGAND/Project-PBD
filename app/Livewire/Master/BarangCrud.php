@@ -20,11 +20,6 @@ class BarangCrud extends Component
 
     public function render()
     {
-        // return view('livewire.master.barang-crud', [
-        //     'data'    => Barang::with('satuan')->orderBy('idbarang')->get(),
-        //     'satuans' => Satuan::orderBy('nama_satuan')->get()
-        // ]);
-
         $Data = DB::select("Select * From viewsbrg_aktif");
         $semuaData = DB::select("Select * from view_barang_satuan");
         $Satuan = DB::select("Select * From satuan Order By nama_satuan");
@@ -57,14 +52,6 @@ class BarangCrud extends Component
         DB::insert(
             "INSERT INTO barang (jenis, nama, idsatuan, harga, status) VALUES (?, ?, ?, ?, ?)",
             [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status]
-
-        // DB::statement("CALL sp_insert_barang(?, ?, ?, ?, ?)", [
-        //     $this->jenis,
-        //     $this->nama,
-        //     $this->idsatuan,
-        //     $this->harga,
-        //     $this->status
-        // ]
         );
 
         session()->flash('ok', 'Barang berhasil ditambahkan!');
@@ -108,15 +95,6 @@ class BarangCrud extends Component
                 SET jenis = ?, nama = ?, idsatuan = ?, harga = ?, status = ?
                 WHERE idbarang = ?",
             [$this->jenis, $this->nama, $this->idsatuan, $this->harga, $this->status, $this->idbarang]
-
-            // DB::statement("CALL sp_update_barang(?, ?, ?, ?, ?, ?)", [
-            //     $this->idbarang,
-            //     $this->jenis,
-            //     $this->nama,
-            //     $this->idsatuan,
-            //     $this->harga,
-            //     $this->status
-            // ]
         );
 
         session()->flash('ok', 'Barang berhasil diupdate!');

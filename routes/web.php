@@ -29,13 +29,12 @@ Route::post('/logout', function () {
 })->name('logout');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'preventBackHistory'])->group(function () {
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // SETTINGS
     Route::redirect('settings', 'settings/profile');
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');

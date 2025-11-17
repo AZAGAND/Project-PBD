@@ -7,19 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class DetailPengadaan extends Component
 {
-    public $idpengadaan;
-
-    public $pengadaan;
-    public $detailPengadaan = [];
-    public $barangList = [];
-
-    public $idbarang, $jumlah, $harga_satuan, $iddetail;
+    public $idpengadaan,$pengadaan,$detailPengadaan = [],$barangList = [],$iddetail;
+    public $idbarang = '';
+    public $jumlah = 1;
+    public $harga_satuan = 0;
+    public $nama_satuan = '';
+    public $total_harga = 0;
     public $isEdit = false;
 
     public function mount($id)
     {
         $this->idpengadaan = $id;
-
         $this->pengadaan = DB::selectOne("
             SELECT p.*, v.nama_vendor, v.badan_hukum, u.username, r.nama_role
             FROM pengadaan p
@@ -27,12 +25,10 @@ class DetailPengadaan extends Component
             JOIN user u   ON u.iduser = p.user_iduser
             JOIN role r   ON r.idrole = u.idrole
             WHERE p.idpengadaan = ?
-            ", [$id]);
-
+        ", [$id]);
 
         $this->detailPengadaan = DB::select("
-            SELECT d.*, b.nama AS nama_barang, b.harga AS harga_barang,
-            s.nama_satuan
+            SELECT d.*, b.nama AS nama_barang, b.harga AS harga_barang, s.nama_satuan
             FROM detail_pengadaan d
             JOIN barang b ON b.idbarang = d.idbarang
             JOIN satuan s ON s.idsatuan = b.idsatuan
@@ -47,26 +43,45 @@ class DetailPengadaan extends Component
         ");
     }
 
-    public function updatedIdbarang($value)
-    {
-        $barang = DB::table('barang')->where('idbarang', $value)->first();
+
+public function updated($name)
+{
+    if ($name === 'idbarang') {
+        if (!$this->idbarang) {
+            $this->harga_satuan = 0;
+            $this->nama_satuan = '';
+            $this->total_harga = 0;
+            return;
+        }
+
+        $barang = DB::selectOne("
+            SELECT b.harga, s.nama_satuan
+            FROM barang b
+            JOIN satuan s ON s.idsatuan = b.idsatuan
+            WHERE b.idbarang = ?
+        ", [$this->idbarang]);
+
         $this->harga_satuan = $barang->harga ?? 0;
+        $this->nama_satuan = $barang->nama_satuan ?? '';
+        $this->total_harga = (int)$this->jumlah * (int)$this->harga_satuan;
     }
 
-
+    if ($name === 'jumlah') {
+        $this->total_harga = (int)$this->jumlah * (int)$this->harga_satuan;
+    }
+}
 
     public function refreshDetail()
     {
         $this->detailPengadaan = DB::select("
             SELECT d.*, b.nama AS nama_barang, b.harga AS harga_barang,
-                   s.nama_satuan
+                    s.nama_satuan
             FROM detail_pengadaan d
             JOIN barang b ON b.idbarang = d.idbarang
             JOIN satuan s ON s.idsatuan = b.idsatuan
             WHERE d.idpengadaan = ?
         ", [$this->idpengadaan]);
 
-        // reload header hanya jika perlu
         $this->pengadaan = DB::selectOne("
             SELECT p.*, v.nama_vendor, u.username
             FROM pengadaan p
@@ -75,6 +90,19 @@ class DetailPengadaan extends Component
             WHERE p.idpengadaan = ?
         ", [$this->idpengadaan]);
 
+    }
+
+    public function resetForm()
+    {
+        $this->idbarang = '';
+        $this->jumlah = 1;
+        $this->harga_satuan = 0;
+        $this->nama_satuan = '';
+        $this->total_harga = 0;
+        $this->iddetail = null;
+        $this->isEdit = false;
+
+        $this->dispatch('show-modal');
     }
 
     public function store()
@@ -87,30 +115,41 @@ class DetailPengadaan extends Component
             $this->idbarang,
             $this->jumlah,
             $this->harga_satuan,
-            $this->jumlah * $this->harga_satuan
+            $this->total_harga
         ]);
 
-        $this->resetInputFields();
-        $this->refreshDetail();
+        $this->resetForm();
         $this->dispatch('close-modal');
+        $this->refreshDetail();
         session()->flash('ok', 'Item berhasil ditambahkan!');
     }
+
+
 
     public function edit($id)
     {
         $item = DB::selectOne("
-            SELECT * FROM detail_pengadaan
-            WHERE iddetail_pengadaan = ?
-        ", [$id]);
+        SELECT d.*, b.nama, b.harga AS harga_barang, s.nama_satuan
+        FROM detail_pengadaan d
+        JOIN barang b ON b.idbarang = d.idbarang
+        JOIN satuan s ON s.idsatuan = b.idsatuan
+        WHERE iddetail_pengadaan = ?
+    ", [$id]);
 
+        if (!$item) {
+            session()->flash('err', 'Item tidak ditemukan!');
+            return;
+        }
         $this->iddetail = $item->iddetail_pengadaan;
         $this->idbarang = $item->idbarang;
+        $this->nama_satuan = $item->nama_satuan;
+        $this->harga_satuan = $item->harga_barang;
         $this->jumlah = $item->jumlah;
-        $this->harga_satuan = $item->harga_satuan;
+        $this->total_harga = $this->jumlah * $this->harga_satuan;
 
         $this->isEdit = true;
-        $this->dispatch('open-modal');
     }
+
 
     public function update()
     {
@@ -129,7 +168,7 @@ class DetailPengadaan extends Component
             $this->iddetail
         ]);
 
-        $this->resetInputFields();
+        $this->resetForm();
         $this->refreshDetail();
         $this->dispatch('close-modal');
         session()->flash('ok', 'Item berhasil diperbarui!');
@@ -137,28 +176,15 @@ class DetailPengadaan extends Component
 
     public function delete($id)
     {
-        DB::delete("
-            DELETE FROM detail_pengadaan
-            WHERE iddetail_pengadaan = ?
-        ", [$id]);
-
+        DB::delete("DELETE FROM detail_pengadaan WHERE iddetail_pengadaan = ?", [$id]);
         DB::statement("CALL Global_Reset_Auto_Increment()");
 
         $this->refreshDetail();
         session()->flash('ok', 'Item berhasil dihapus!');
     }
 
-    public function resetInputFields()
-    {
-        $this->idbarang = null;
-        $this->jumlah = null;
-        $this->harga_satuan = null;
-        $this->iddetail = null;
-        $this->isEdit = false;
-    }
-
     public function render()
     {
-        return view('livewire.transaction.detail-pengadaan');
+        return view('livewire.transaction.Detail-Pengadaan');
     }
 }

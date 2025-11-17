@@ -73,9 +73,9 @@
                                 <td class="px-4 py-3 text-center">
                                     @php
                                         $badge = [
-                                            'A' => ['Pending', 'bg-yellow-100 text-yellow-700'],
-                                            'B' => ['Disetujui', 'bg-green-100 text-green-700'],
-                                            'C' => ['Ditolak', 'bg-red-100 text-red-700'],
+                                            'P' => ['Pending', 'bg-yellow-100 text-yellow-700'],
+                                            'D' => ['Done', 'bg-green-100 text-green-700'],
+                                            'C' => ['Canceled', 'bg-red-100 text-red-700'],
                                         ];
                                     @endphp
                                     <span
@@ -120,7 +120,9 @@
     </main>
 
     {{-- ================= MODAL TAMBAH ================= --}}
-    <div id="modalBackdrop" class="fixed inset-0 bg-black/30 hidden opacity-0 transition"></div>
+    <div id="modalBackdrop" wire:ignore class="fixed inset-0 hidden z-40 transition-opacity duration-300 opacity-0"
+        style="background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(6px);">
+    </div>
     <div id="modalContainer" class="fixed inset-0 flex hidden justify-center items-center z-50">
         <div id="modalContent"
             class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 transform scale-95 opacity-0 transition">
@@ -140,17 +142,14 @@
 
                 <div class="mb-4">
                     <label class="text-sm font-semibold">PPN (%)</label>
-                    <input type="number" wire:model.defer="ppn" class="w-full border rounded px-3 py-2" min="0"
+                    <input type="number" wire:model.defer="ppn" readonly class="w-full border rounded px-3 py-2" min="0"
                         max="100">
                 </div>
 
                 <div class="mb-4">
                     <label class="text-sm font-semibold">Status</label>
-                    <select wire:model.defer="status" class="w-full border rounded px-3 py-2">
-                        <option value="A">Pending</option>
-                        <option value="B">Disetujui</option>
-                        <option value="C">Ditolak</option>
-                    </select>
+                    <input type="text" wire:model.defer="status" readonly class="w-full border rounded px-3 py-2" min="0"
+                        max="100">
                 </div>
 
                 <div class="flex justify-end gap-2">
