@@ -115,7 +115,6 @@
                         <p class="text-sm text-gray-600">Kelola Margin Penjualan.</p>
                     </a>
 
-                    {{-- === CARD: TRANSACTION === --}}
                     <a href="{{ route('transaction.pengadaan') }}"
                         class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-purple-500
                                 hover:border-purple-600 hover:-translate-y-1 transition-all duration-300">
@@ -126,6 +125,30 @@
                             <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-700">Pengadaan Barang</h3>
                         </div>
                         <p class="text-sm text-gray-600">Kelola Pengadaan barangmu.</p>
+                    </a>
+
+                    <a href="{{ route('transaction.Penerimaan') }}"
+                        class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-purple-500
+                                hover:border-purple-600 hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <span class="text-2xl">🏢</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-700">Penerimaan Barang</h3>
+                        </div>
+                        <p class="text-sm text-gray-600">Data Penerimaan.</p>
+                    </a>
+
+                    <a href="{{ route('transaction.FormPenerimaan') }}"
+                        class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-purple-500
+                                hover:border-purple-600 hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <span class="text-2xl">🏢</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-700">Terima Barangmu</h3>
+                        </div>
+                        <p class="text-sm text-gray-600">Kelola Penerimaan barangmu.</p>
                     </a>
 
                 </div>

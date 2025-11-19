@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Pengadaan extends Component
 {
     public $vendor_idvendor;
-    public $status = 'Pending', $ppn = 10, $vendors = [], $data = [];
+    public $status = 'P', $ppn = 10, $vendors = [], $data = [];
 
     public function mount()
     {

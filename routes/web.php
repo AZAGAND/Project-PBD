@@ -13,6 +13,8 @@ use App\Livewire\Master\MarginPenjualan;
 use App\Livewire\Transaction\Pengadaan;
 use App\Livewire\Transaction\DetailPengadaan;
 use App\Livewire\Transaction\Penerimaan;
+use App\Livewire\Transaction\DetailPenerimaan;
+use App\Livewire\Transaction\FormPenerimaan;
 
 
 Route::get('/', function() {
@@ -53,8 +55,10 @@ Route::middleware(['auth', 'preventBackHistory'])->group(function () {
     // TRANSACTION
     Route::prefix('transaction')->group(function () {
         Route::get('pengadaan', Pengadaan::class)->name('transaction.pengadaan');
-        Route::get('pengadaan/{id}/detail', DetailPengadaan::class)->name('transaction.pengadaan.detail');
+        Route::get('pengadaan/{idpengadaan}/detail', DetailPengadaan::class)->name('transaction.pengadaan.detail');
         Route::get('Penerimaan', Penerimaan::class)->name('transaction.Penerimaan');
+        Route::get('penerimaan/{idpenerimaan}/detail', DetailPenerimaan::class)->name('transaction.penerimaan.detail');
+        route::get('FormPenerimaan', FormPenerimaan::class)->name('transaction.FormPenerimaan');
     });
 
 });

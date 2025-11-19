@@ -15,9 +15,9 @@ class DetailPengadaan extends Component
     public $total_harga = 0;
     public $isEdit = false;
 
-    public function mount($id)
+    public function mount($idpengadaan)
     {
-        $this->idpengadaan = $id;
+        $this->idpengadaan = $idpengadaan;
         $this->pengadaan = DB::selectOne("
             SELECT p.*, v.nama_vendor, v.badan_hukum, u.username, r.nama_role
             FROM pengadaan p
@@ -25,7 +25,7 @@ class DetailPengadaan extends Component
             JOIN user u   ON u.iduser = p.user_iduser
             JOIN role r   ON r.idrole = u.idrole
             WHERE p.idpengadaan = ?
-        ", [$id]);
+        ", [$idpengadaan]);
 
         $this->detailPengadaan = DB::select("
             SELECT d.*, b.nama AS nama_barang, b.harga AS harga_barang, s.nama_satuan
@@ -33,7 +33,7 @@ class DetailPengadaan extends Component
             JOIN barang b ON b.idbarang = d.idbarang
             JOIN satuan s ON s.idsatuan = b.idsatuan
             WHERE d.idpengadaan = ?
-        ", [$id]);
+        ", [$idpengadaan]);
 
         $this->barangList = DB::select("
             SELECT b.*, s.nama_satuan
