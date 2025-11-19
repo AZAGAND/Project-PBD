@@ -124,8 +124,6 @@ public function updated($name)
         session()->flash('ok', 'Item berhasil ditambahkan!');
     }
 
-
-
     public function edit($id)
     {
         $item = DB::selectOne("
@@ -149,8 +147,7 @@ public function updated($name)
 
         $this->isEdit = true;
     }
-
-
+    
     public function update()
     {
         DB::update("
