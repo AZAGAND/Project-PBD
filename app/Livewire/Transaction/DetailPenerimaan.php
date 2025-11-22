@@ -32,7 +32,7 @@ class DetailPenerimaan extends Component
             SELECT *
             FROM views_detail_penerimaan
             WHERE idpenerimaan = ?
-            ORDER BY iddetail_penerimaan DESC
+            ORDER BY iddetail_penerimaan ASC
         ", [$this->idpenerimaan]);
     }
 

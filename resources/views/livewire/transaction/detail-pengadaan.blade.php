@@ -79,8 +79,8 @@
                     </div>
                     @php
                         $statusConfig = [
-                            'P' => ['label' => 'Pending', 'class' => 'bg-amber-100 text-amber-700'],
-                            'D' => ['label' => 'Done', 'class' => 'bg-emerald-100 text-emerald-700'],
+                            'P' => ['label' => 'Process', 'class' => 'bg-amber-100 text-amber-700'],
+                            'S' => ['label' => 'Selesai', 'class' => 'bg-emerald-100 text-emerald-700'],
                             'C' => ['label' => 'Canceled', 'class' => 'bg-rose-100 text-rose-700'],
                         ];
                         $status = $statusConfig[$pengadaan->status ?? 'P'] ?? [
@@ -119,6 +119,8 @@
             </section>
 
             {{-- ========== Tombol Tambah Item ========== --}}
+
+            @if ($pengadaan->status !== 'S')
             <div class="flex justify-end">
                 <button wire:click="resetForm" @click="$wire.resetForm().then(() => openModal())"
                     class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
@@ -129,6 +131,8 @@
                 </button>
             </div>
 
+            @endif
+            
             {{-- ========== Tabel Detail Pengadaan ========== --}}
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-indigo-600">
                 <div
@@ -191,16 +195,18 @@
                                         {{ number_format($d->sub_total, 0, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center gap-2">
-                                            <button wire:click="edit({{ $d->iddetail_pengadaan }})"
-                                                @click="$wire.edit({{ $d->iddetail_pengadaan }}).then(() => openModal())"
-                                                class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
-                                                ✏️ Edit
-                                            </button>
-                                            <button
-                                                onclick="confirmDelete({{ $d->iddetail_pengadaan }}, '{{ $d->barang->nama ?? 'Item' }}')"
-                                                class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow transition">
-                                                🗑️ Hapus
-                                            </button>
+                                            @if (($pengadaan->status ?? 'P') !== 'S')
+                                                <button wire:click="edit({{ $d->iddetail_pengadaan }})"
+                                                    @click="$wire.edit({{ $d->iddetail_pengadaan }}).then(() => openModal())"
+                                                    class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                    ✏️ Edit
+                                                </button>
+
+                                                <button wire:click="delete({{ $d->iddetail_pengadaan }})"
+                                                    class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg shadow transition">
+                                                    🗑️ Hapus
+                                                </button>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -254,7 +260,7 @@
     </main>
 
     <!-- ================= BACKDROP ================= -->
-     <div id="modalBackdrop" wire:ignore class="fixed inset-0 hidden z-40 transition-opacity duration-300 opacity-0"
+    <div id="modalBackdrop" wire:ignore class="fixed inset-0 hidden z-40 transition-opacity duration-300 opacity-0"
         style="background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(6px);">
     </div>
 
@@ -266,19 +272,21 @@
                 scale-95 opacity-0 border-t-4 border-blue-600"
             onclick="event.stopPropagation()">
 
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-gray-200 rounded-t-2xl flex items-center justify-between">
-            <div>
-                <h3 class="text-lg font-bold text-gray-800">
-                    {{ $isEdit ? 'Edit Item Pengadaan' : 'Tambah Item Pengadaan' }}
-                </h3>
-                <p class="text-xs text-gray-500">
-                    {{ $isEdit ? 'Perbarui data item pengadaan' : 'Tambah item baru' }}
-                </p>
+            <div
+                class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-gray-200 rounded-t-2xl flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">
+                        {{ $isEdit ? 'Edit Item Pengadaan' : 'Tambah Item Pengadaan' }}
+                    </h3>
+                    <p class="text-xs text-gray-500">
+                        {{ $isEdit ? 'Perbarui data item pengadaan' : 'Tambah item baru' }}
+                    </p>
+                </div>
+                <button type="button" onclick="closeModal()"
+                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all">
+                    ❌
+                </button>
             </div>
-            <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-all">
-                ❌
-            </button>
-        </div>
 
             <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}" class="p-6 space-y-4">
 

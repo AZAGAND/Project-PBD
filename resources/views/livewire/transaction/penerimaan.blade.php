@@ -72,6 +72,7 @@
                                 <th class="px-3 py-2 text-right">Total Nilai</th>
                                 <th class="px-3 py-2 text-left">User</th>
                                 <th class="px-3 py-2 text-center rounded-r-lg">Aksi</th>
+                                <th class="px-4 py-2 text-left">STATUS</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -101,6 +102,20 @@
                                             Detail
                                         </a>
                                     </td>
+                                    <td class="px-4 py-2">
+                                        @if ($item->status == 'S')
+                                            <span
+                                                class="px-3 py-1 text-[13px] bg-green-100 text-green-700 rounded-xl font-semibold">
+                                                ✔ Selesai
+                                            </span>
+                                        @else
+                                            <span
+                                                class="px-3 py-1 text-[13px] bg-yellow-100 text-yellow-700 rounded-xl font-semibold">
+                                                🔄 Proses
+                                            </span>
+                                        @endif
+                                    </td>
+
                                 </tr>
                             @empty
                                 <tr>
@@ -116,15 +131,15 @@
 
         </div>
         {{-- ================= BACK BUTTON ================= --}}
-            <div class="text-center">
-                <a href="{{ route('dashboard') }}"
-                    class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Kembali ke Dashboard
-                </a>
-            </div>
+        <div class="text-center">
+            <a href="{{ route('dashboard') }}"
+                class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Kembali ke Dashboard
+            </a>
+        </div>
     </main>
 
 </div>

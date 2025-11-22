@@ -10,6 +10,7 @@ use App\Livewire\Master\BarangCrud;
 use App\Livewire\Master\VendorCrud;
 use App\Livewire\Master\SatuanCrud;
 use App\Livewire\Master\MarginPenjualan;
+use App\Livewire\Master\KartuStock;
 use App\Livewire\Transaction\Pengadaan;
 use App\Livewire\Transaction\DetailPengadaan;
 use App\Livewire\Transaction\Penerimaan;
@@ -50,6 +51,7 @@ Route::middleware(['auth', 'preventBackHistory'])->group(function () {
         Route::get('satuan', SatuanCrud::class)->name('master.satuan');
         Route::get('barang', BarangCrud::class)->name('master.barang');
         Route::get('MarginPenjualan', MarginPenjualan::class)->name('master.marginPenjualan');
+        Route::get('KartuStock', KartuStock::class)->name('master.kartuStock');
     });
 
     // TRANSACTION

@@ -75,7 +75,8 @@
                             </div>
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">Detail Barang Diterima</h2>
-                                <p class="text-xs text-gray-500">Data diambil dari views_detail_penerimaan (read only)</p>
+                                <p class="text-xs text-gray-500">Data diambil dari views_detail_penerimaan (read only)
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -89,6 +90,7 @@
                                     <th class="px-3 py-2 text-right">Jumlah Terima</th>
                                     <th class="px-3 py-2 text-right">Harga Satuan</th>
                                     <th class="px-3 py-2 text-right rounded-r-lg">Subtotal</th>
+                                    <th class="px-3 py-2">Nomor Pengiriman</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -97,13 +99,14 @@
                                         <td class="px-3 py-2 text-gray-800">
                                             {{ $row->nama_barang }}<br>
                                             <span class="text-[11px] text-gray-500">
-                                                ID Barang: {{ $row->barang_idbarang }} • Detail ID: {{ $row->iddetail_penerimaan }}
+                                                ID Barang: {{ $row->barang_idbarang }} • Detail ID:
+                                                {{ $row->iddetail_penerimaan }}
                                             </span>
                                         </td>
-                                        <td class="px-3 py-2 text-gray-700">
+                                        <td class="px-3 py-2  text-gray-700">
                                             {{ $row->nama_satuan }}
                                         </td>
-                                        <td class="px-3 py-2 text-right text-gray-800">
+                                        <td class="px-3 py-2 text-gray-800 text-center pl-10">
                                             {{ number_format($row->jumlah_terima, 0, ',', '.') }}
                                         </td>
                                         <td class="px-3 py-2 text-right text-gray-800">
@@ -112,6 +115,16 @@
                                         <td class="px-3 py-2 text-right font-semibold text-gray-900">
                                             Rp {{ number_format($row->sub_total_terima, 0, ',', '.') }}
                                         </td>
+                                        <td class="px-3 py-2">
+                                            <div class="flex justify-center">
+                                                <span
+                                                    class="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold">
+                                                    #{{ $row->pengiriman_ke }}
+                                                </span>
+                                            </div>
+                                        </td>
+
+
                                     </tr>
                                 @empty
                                     <tr>

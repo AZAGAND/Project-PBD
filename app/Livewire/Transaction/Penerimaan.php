@@ -7,13 +7,18 @@ use Illuminate\Support\Facades\DB;
 
 class Penerimaan extends Component
 {
-    public function render()
+
+    // public $filterStatus = '';
+    // public $Caridata = '';
+
+    // public $penerimaanList = [];
+
+        public function render()
     {
-        // Ambil data dari views_penerimaan (sudah kamu buat di DB)
         $penerimaanList = DB::select("
             SELECT *
             FROM views_penerimaan
-            ORDER BY idpenerimaan DESC
+            ORDER BY idpenerimaan ASC
         ");
 
         return view('livewire.transaction.penerimaan', [
@@ -21,56 +26,79 @@ class Penerimaan extends Component
         ]);
     }
 
-    public function delete($idpenerimaan)
-    {
-        DB::beginTransaction();
+    // public function mount()
+    // {
+    //     $this->loadData();
+    // }
 
-        try {
-            // --- 1. Hapus detail_retur & retur yang terkait penerimaan ini (jika ada) ---
-            DB::delete("
-                DELETE dr
-                FROM detail_retur dr
-                JOIN retur r ON r.idretur = dr.idretur
-                WHERE r.idpenerimaan = ?
-            ", [$idpenerimaan]);
+    // public function updatedFilterStatus()
+    // {
+    //     $this->loadData();
+    // }
 
-            DB::delete("
-                DELETE FROM retur
-                WHERE idpenerimaan = ?
-            ", [$idpenerimaan]);
+    // public function updatedCaridata()
+    // {
+    //     $this->loadData();
+    // }
 
-            // --- 2. Hapus kartu_stok untuk transaksi penerimaan ini (jenis M) ---
-            DB::delete("
-                DELETE FROM kartu_stok
-                WHERE jenis_transaksi = 'M'
-                AND idtransaksi = ?
-            ", [$idpenerimaan]);
+    // public function loadData()
+    // {
+    //     if ($this->Caridata !== '') {
+    //         $this->penerimaanList = DB::select(
+    //             "CALL SP_SearchPenerimaanByPengadaan(?)",
+    //             [$this->Caridata]
+    //         );
+    //         return;
+    //     }
 
-            // --- 3. Hapus detail_penerimaan ---
-            DB::delete("
-                DELETE FROM detail_penerimaan
-                WHERE idpenerimaan = ?
-            ", [$idpenerimaan]);
+    //     $this->penerimaanList = DB::select(
+    //         "CALL SP_FilterPenerimaan(?)",
+    //         [$this->filterStatus]
+    //     );
+    // }
+    
 
-            // --- 4. Terakhir, hapus header penerimaan ---
-            DB::delete("
-                DELETE FROM penerimaan
-                WHERE idpenerimaan = ?
-            ", [$idpenerimaan]);
+    // public function delete($idpenerimaan)
+    // {
+    //     DB::beginTransaction();
 
-            // Kalau kamu mau hapus pengadaan juga, bisa tambah logic di sini
-            // TAPI hati-hati sama relasi ke tabel lain.
-            // Untuk keamanan, sementara TIDAK kita hapus pengadaan-nya.
+    //     try {
+    //         DB::delete("
+    //             DELETE dr
+    //             FROM detail_retur dr
+    //             JOIN retur r ON r.idretur = dr.idretur
+    //             WHERE r.idpenerimaan = ?
+    //         ", [$idpenerimaan]);
 
-            // Opsional: reset auto increment (punyamu sudah ada prosedurnya)
-            DB::statement("CALL Global_Reset_Auto_Increment()");
+    //         DB::delete("
+    //             DELETE FROM retur
+    //             WHERE idpenerimaan = ?
+    //         ", [$idpenerimaan]);
 
-            DB::commit();
+    //         DB::delete("
+    //             DELETE FROM kartu_stok
+    //             WHERE jenis_transaksi = 'M'
+    //             AND idtransaksi = ?
+    //         ", [$idpenerimaan]);
 
-            session()->flash('ok', 'Penerimaan berhasil dihapus beserta data terkait!');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            session()->flash('err', 'Gagal menghapus penerimaan: ' . $e->getMessage());
-        }
-    }
+    //         DB::delete("
+    //             DELETE FROM detail_penerimaan
+    //             WHERE idpenerimaan = ?
+    //         ", [$idpenerimaan]);
+
+    //         DB::delete("
+    //             DELETE FROM penerimaan
+    //             WHERE idpenerimaan = ?
+    //         ", [$idpenerimaan]);
+
+    //         DB::statement("CALL Global_Reset_Auto_Increment()");
+
+    //         DB::commit();
+
+    //         session()->flash('ok', 'Penerimaan berhasil dihapus beserta data terkait!');
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
+    //         session()->flash('err', 'Gagal menghapus penerimaan: ' . $e->getMessage());
+    //     }
+    // }
 }

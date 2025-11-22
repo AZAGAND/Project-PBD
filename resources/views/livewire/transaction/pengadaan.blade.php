@@ -73,8 +73,8 @@
                                 <td class="px-4 py-3 text-center">
                                     @php
                                         $badge = [
-                                            'P' => ['Pending', 'bg-yellow-100 text-yellow-700'],
-                                            'D' => ['Done', 'bg-green-100 text-green-700'],
+                                            'P' => ['Process', 'bg-yellow-100 text-yellow-700'],
+                                            'S' => ['Selesai', 'bg-green-100 text-green-700'],
                                             'C' => ['Canceled', 'bg-red-100 text-red-700'],
                                         ];
                                     @endphp

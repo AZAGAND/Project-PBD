@@ -89,6 +89,19 @@
                         <p class="text-sm text-gray-600">Kelola data satuan barang.</p>
                     </a>
 
+                    {{-- === CARD: SATUAN === --}}
+                    <a href="{{ route('master.kartuStock') }}"
+                        class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-amber-500
+                               hover:border-amber-600 hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                                <span class="text-2xl">⚖️</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-amber-700">Kartu Stok</h3>
+                        </div>
+                        <p class="text-sm text-gray-600">Kelola data Kartu Stok barangmu.</p>
+                    </a>
+
                     {{-- === CARD: VENDOR === --}}
                     <a href="{{ route('master.vendor') }}"
                         class="group p-6 rounded-2xl bg-white shadow-md hover:shadow-xl border-t-4 border-purple-500
